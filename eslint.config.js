@@ -1,7 +1,7 @@
-// apps/frontend/eslint.config.js
 import js from '@eslint/js';
 import angular from '@angular-eslint/eslint-plugin';
-import angularTemplate from '@angular-eslint/eslint-plugin-template';
+import angularTemplatePlugin from '@angular-eslint/eslint-plugin-template';
+import angularTemplateParser from '@angular-eslint/template-parser';
 import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 import importPlugin from 'eslint-plugin-import';
@@ -37,6 +37,7 @@ export default [
       'no-eval': 'error',
       'prefer-const': 'error',
       '@typescript-eslint/no-unused-vars': ['warn'],
+      '@typescript-eslint/ban-ts-comment': ['error'],
       'import/order': [
         'warn',
         {
@@ -50,11 +51,15 @@ export default [
 
   {
     files: ['**/*.html'],
+    languageOptions: {
+      parser: angularTemplateParser,
+    },
     plugins: {
-      '@angular-eslint/template': angularTemplate,
+      '@angular-eslint/template': angularTemplatePlugin,
     },
     rules: {
-      ...angularTemplate.configs.recommended.rules,
+      ...angularTemplatePlugin.configs.recommended.rules,
+      '@typescript-eslint/ban-ts-comment': 'off',
     },
   },
 ];
