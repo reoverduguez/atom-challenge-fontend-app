@@ -21,7 +21,6 @@ export class TaskService {
   }
 
   public updateTask(id: string, task: Partial<Task>): Observable<Task> {
-    console.log('id', id);
     return this.http.put<Task>(`${this.apiUrl}/${id}`, { ...task });
   }
 

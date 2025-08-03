@@ -102,7 +102,6 @@ export class LoginComponent {
       .subscribe(async (response) => {
         try {
           await signInWithCustomToken(this.auth, response.token);
-          localStorage.setItem('authToken', response.token);
           this.router.navigateByUrl('/');
         } catch (err) {
           console.error(err);
