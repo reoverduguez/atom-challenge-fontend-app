@@ -33,14 +33,17 @@ export const createTaskFailure = createAction(
   props<{ error: ApiErrorResponse }>(),
 );
 
-export const updateTask = createAction('[Tasks] Update Task', props<{ task: Partial<Task> }>());
+export const updateTask = createAction(
+  '[Tasks] Update Task',
+  props<{ id: string; task: Partial<Task> }>(),
+);
 export const updateTaskSuccess = createAction(
   '[Tasks] Update Task Success',
   props<{ task: Task }>(),
 );
 export const updateTaskFailure = createAction(
   '[Tasks] Update Task Failure',
-  props<{ error: string }>(),
+  props<{ error: ApiErrorResponse }>(),
 );
 
 export const deleteTask = createAction('[Tasks] Delete Task', props<{ id: string }>());
@@ -50,5 +53,5 @@ export const deleteTaskSuccess = createAction(
 );
 export const deleteTaskFailure = createAction(
   '[Tasks] Delete Task Failure',
-  props<{ error: string }>(),
+  props<{ error: ApiErrorResponse }>(),
 );

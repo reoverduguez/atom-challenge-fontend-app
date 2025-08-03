@@ -19,4 +19,15 @@ export class TaskService {
   public createTask(task: Omit<Task, 'id' | 'createdAt'>): Observable<Task> {
     return this.http.post<Task>(`${this.apiUrl}`, { ...task });
   }
+
+  public updateTask(id: string, task: Partial<Task>): Observable<Task> {
+    console.log('id', id);
+    return this.http.put<Task>(`${this.apiUrl}/${id}`, { ...task });
+  }
+
+  public removeTask(taskId: string): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${taskId}`, {
+      responseType: 'text' as const,
+    });
+  }
 }

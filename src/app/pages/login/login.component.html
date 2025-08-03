@@ -10,6 +10,7 @@
             matSuffix
             mat-icon-button
             aria-label="Clear"
+            [disabled]="loading || loginButtonDisabled"
             (click)="loginForm.controls['email'].setValue('')"
           >
             <mat-icon>close</mat-icon>
@@ -24,7 +25,14 @@
           <mat-error>Enter a valid email address</mat-error>
         }
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+      <button
+        #submitButton
+        mat-raised-button
+        color="primary"
+        type="submit"
+        aria-label="login"
+        [disabled]="loginForm.invalid || loginButtonDisabled"
+      >
         @if (loading) {
           <mat-spinner diameter="25"></mat-spinner>
         } @else {

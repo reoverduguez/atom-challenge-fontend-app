@@ -3,8 +3,8 @@
     <h2 mat-dialog-title>Would you like to register your email?</h2>
     <mat-dialog-content>{{ dialogData.email }} does not exist in our records</mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-raised-button (click)="createUser()">Yes</button>
-      <button mat-raised-button mat-dialog-close>No</button>
+      <button mat-raised-button aria-label="Yes" (click)="createUser()">Yes</button>
+      <button mat-raised-button aria-label="No" mat-dialog-close>No</button>
     </mat-dialog-actions>
   } @else {
     <h2 mat-dialog-title>Registering your email please wait...</h2>

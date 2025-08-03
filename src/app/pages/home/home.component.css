@@ -1,4 +1,4 @@
-.table-container {
+.home-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,12 +7,100 @@
   row-gap: 1rem;
 }
 
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
+.table-container {
+  width: 100%;
+}
+
+.form-field-small {
+  font-size: 0.875rem;
+  margin: 0;
+  width: 100%;
+}
+
+.form-field-small .mat-mdc-form-field-infix {
+  padding: 0;
+  font-size: 1.5rem;
+}
+
+.form-field-small .mat-mdc-floating-label {
+  font-size: 0.625rem;
+}
+
 .add-task-button {
   align-self: flex-end;
 }
 
-@media (max-width: 600px) {
-  .table-container {
+.button-action-container {
+  display: flex;
+  flex-direction: row;
+  align-self: flex-end;
+  column-gap: 1rem;
+}
+
+.task-table {
+  .mat-column-title,
+  .mat-column-description {
+    padding: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .home-container {
     padding: 1rem;
+  }
+
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+
+  .mobile-field {
+    width: 150px;
+  }
+
+  .mobile-field ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background: transparent;
+  }
+
+  .mobile-field ::ng-deep .mat-mdc-text-field-wrapper:hover .mat-mdc-form-field-focus-overlay {
+    opacity: 0;
+  }
+
+  .card-title {
+    padding: 0 1rem;
+  }
+
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
+  .card-container {
+    padding: 0.5rem;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+  }
+
+  .content-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 0.5rem;
   }
 }

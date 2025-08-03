@@ -1,38 +1,211 @@
-<div class="table-container" *ngIf="tasks$ | async as tasks">
-  <button
-    mat-mini-fab
-    matTooltip="Add Task"
-    class="add-task-button"
-    color="primary"
-    aria-label="Add task"
-    (click)="addTask()"
-  >
-    <mat-icon>add_2</mat-icon>
-  </button>
-  <table mat-table [dataSource]="tasks" class="mat-elevation-z8">
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef>Title</th>
-      <td mat-cell *matCellDef="let task">{{ task.title }}</td>
-    </ng-container>
+<div class="home-container" *ngIf="tasks$ | async as tasks">
+  <div class="button-action-container">
+    <button
+      mat-mini-fab
+      matTooltip="Add Task"
+      class="add-task-button"
+      color="primary"
+      aria-label="Add task"
+      [disabled]="loading$ | async"
+      (click)="addTask()"
+    >
+      <mat-icon>add_2</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      matTooltip="Logout"
+      class="exit-button"
+      color="primary"
+      aria-label="Logout"
+      [disabled]="loading$ | async"
+      (click)="exit()"
+    >
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </div>
+  <div class="table-container desktop-view">
+    <table mat-table [dataSource]="tasks" class="mat-elevation-z8 task-table">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let task" class="m-card-title">
+          @if (editMode && task.id === pendingTaskId) {
+            <mat-form-field class="form-field-small">
+              <mat-label>Title</mat-label>
+              <input matInput [formControl]="editForm.controls['title']" aria-label="Edit title" />
+            </mat-form-field>
+          } @else {
+            {{ task.title }}
+          }
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>Description</th>
-      <td mat-cell *matCellDef="let task">{{ task.description }}</td>
-    </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let task" class="m-card-sub-title">
+          @if (editMode && task.id === pendingTaskId) {
+            <mat-form-field class="form-field-small">
+              <mat-label>Description</mat-label>
+              <input
+                matInput
+                [formControl]="editForm.controls['description']"
+                aria-label="Edit description"
+              />
+            </mat-form-field>
+          } @else {
+            <div class="center">
+              {{ task.description }}
+            </div>
+          }
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef>Created</th>
-      <td mat-cell *matCellDef="let task">{{ task.createdAt | date: 'longDate' }}</td>
-    </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Created</th>
+        <td mat-cell *matCellDef="let task">{{ task.createdAt | date: 'longDate' }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="completed">
-      <th mat-header-cell *matHeaderCellDef>Completed</th>
-      <td mat-cell *matCellDef="let task">
-        <mat-checkbox [checked]="task.completed" disabled></mat-checkbox>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="completed">
+        <th mat-header-cell *matHeaderCellDef>Completed</th>
+        <td mat-cell *matCellDef="let task">
+          @if (editMode && task.id === pendingTaskId) {
+            <mat-checkbox
+              [formControl]="editForm.controls['completed']"
+              [disabled]="loading"
+            ></mat-checkbox>
+          } @else {
+            <mat-checkbox
+              (change)="checkboxToggle(task.id, $event)"
+              [checked]="task.completed"
+              [disabled]="loading$ | async"
+            ></mat-checkbox>
+          }
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let task">
+          @if (loading && task.id === pendingTaskId) {
+            <mat-spinner diameter="25"></mat-spinner>
+          } @else if (editMode && pendingTaskId === task.id) {
+            <button
+              matTooltip="save task"
+              mat-icon-button
+              [disabled]="loading$ | async"
+              (click)="saveTask(task.id)"
+            >
+              <mat-icon>task</mat-icon>
+            </button>
+            <button
+              matTooltip="close"
+              mat-icon-button
+              [disabled]="loading"
+              (click)="cancelEdit(task)"
+            >
+              <mat-icon>close_small</mat-icon>
+            </button>
+          } @else {
+            <button
+              matTooltip="remove task"
+              mat-icon-button
+              [disabled]="loading$ | async"
+              (click)="deleteTask(task.id)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              matTooltip="edit task"
+              mat-icon-button
+              [disabled]="loading"
+              (click)="editTask(task)"
+            >
+              <mat-icon>edit_square</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <div class="cards-container mobile-view">
+    @for (task of tasks; track task.id) {
+      <mat-card class="card-container">
+        <mat-card-title class="card-title">
+          @if (editMode) {
+            <mat-form-field class="form-field-small mobile-field">
+              <mat-label>Title</mat-label>
+              <input matInput [formControl]="editForm.controls['title']" aria-label="Edit title" />
+            </mat-form-field>
+          } @else {
+            {{ task.title }}
+          }
+        </mat-card-title>
+        <mat-card-content class="card-content">
+          <div class="content-row">
+            <strong>Description:</strong>
+            @if (editMode) {
+              <mat-form-field class="form-field-small mobile-field">
+                <mat-label>Description</mat-label>
+                <input
+                  matInput
+                  [formControl]="editForm.controls['description']"
+                  aria-label="Edit description"
+                />
+              </mat-form-field>
+            } @else {
+              {{ task.description }}
+            }
+          </div>
+          <div class="content-row">
+            <strong>Created:</strong> {{ task.createdAt | date: 'longDate' }}
+          </div>
+          <div class="content-row">
+            <strong>Completed:</strong>
+            <mat-checkbox
+              (change)="checkboxToggle(task.id, $event)"
+              [checked]="task.completed"
+              [disabled]="loading$ | async"
+            ></mat-checkbox>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          @if (editMode && pendingTaskId === task.id) {
+            @if (!loading) {
+              <button matTooltip="save task" mat-icon-button (click)="saveTask(task.id)">
+                <mat-icon>task</mat-icon>
+              </button>
+              <button matTooltip="close" mat-icon-button (click)="cancelEdit(task)">
+                <mat-icon>close_small</mat-icon>
+              </button>
+            } @else if (loading && task.id === pendingTaskId) {
+              <mat-spinner diameter="25"></mat-spinner>
+            }
+          } @else {
+            @if (loading && task.id === pendingTaskId) {
+              <mat-spinner diameter="25"></mat-spinner>
+            } @else {
+              <button
+                [disabled]="loading$ | async"
+                matTooltip="remove task"
+                mat-icon-button
+                (click)="deleteTask(task.id)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                [disabled]="loading$ | async"
+                matTooltip="edit task"
+                mat-icon-button
+                (click)="editTask(task)"
+              >
+                <mat-icon>edit_square</mat-icon>
+              </button>
+            }
+          }
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
 </div>

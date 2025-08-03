@@ -32,6 +32,7 @@ export class LoginComponent {
 
   public readonly title = 'Task Manager';
 
+  public loginButtonDisabled = false;
   public loading = false;
 
   public loginForm = this.formBuilder.group({
@@ -41,10 +42,14 @@ export class LoginComponent {
   public login(): void {
     const { email } = this.loginForm.value;
 
-    if (this.loginForm.invalid || !email || email.trim().length === 0) {
+    if (this.loginForm.invalid || !email || email.trim().length === 0 || this.loading) {
       return;
     }
+
     this.loading = true;
+    this.loginForm.disable();
+    this.loginButtonDisabled = true;
+
     this.authService
       .login(email)
       .pipe(
@@ -98,7 +103,6 @@ export class LoginComponent {
         try {
           await signInWithCustomToken(this.auth, response.token);
           localStorage.setItem('authToken', response.token);
-          // this.loadUserTasks();
           this.router.navigateByUrl('/');
         } catch (err) {
           console.error(err);
@@ -108,6 +112,8 @@ export class LoginComponent {
             horizontalPosition: 'center',
             verticalPosition: 'top',
           });
+          this.loginForm.enable();
+          this.loginButtonDisabled = false;
         }
       });
   }

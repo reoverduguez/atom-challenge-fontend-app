@@ -5,8 +5,12 @@ import {
   createTask,
   createTaskFailure,
   createTaskSuccess,
+  deleteTask,
+  deleteTaskFailure,
   deleteTaskSuccess,
   loadTasksSuccess,
+  updateTask,
+  updateTaskFailure,
   updateTaskSuccess,
 } from './tasks.actions';
 import { initialTaskState, taskAdapter } from './tasks.state';
@@ -29,8 +33,25 @@ export const taskReducer = createReducer(
     taskAdapter.addOne(task, { ...state, loading: false }),
   ),
 
+  on(updateTask, (state, {}) => ({
+    ...state,
+    loading: true,
+  })),
   on(updateTaskSuccess, (state, { task }) =>
-    taskAdapter.updateOne({ id: task.id, changes: task }, state),
+    taskAdapter.updateOne({ id: task.id, changes: task }, { ...state, loading: false }),
   ),
-  on(deleteTaskSuccess, (state, { id }) => taskAdapter.removeOne(id, state)),
+  on(updateTaskFailure, (state, {}) => ({
+    ...state,
+    loading: false,
+  })),
+
+  on(deleteTask, (state, {}) => ({
+    ...state,
+    loading: true,
+  })),
+  on(deleteTaskSuccess, (state, { id }) => taskAdapter.removeOne(id, { ...state, loading: false })),
+  on(deleteTaskFailure, (state, {}) => ({
+    ...state,
+    loading: false,
+  })),
 );
