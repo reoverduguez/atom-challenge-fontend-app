@@ -4,7 +4,17 @@
     <form [formGroup]="loginForm" class="login-form" (ngSubmit)="login()">
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" />
+        <input matInput type="email" formControlName="email" aria-label="Email Address" />
+        @if (loginForm.controls['email'].value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="loginForm.controls['email'].setValue('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
         @if (
           loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched
         ) {
@@ -15,7 +25,11 @@
         }
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
-        Login
+        @if (loading) {
+          <mat-spinner diameter="25"></mat-spinner>
+        } @else {
+          Login
+        }
       </button>
     </form>
   </mat-card>
