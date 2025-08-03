@@ -6,3 +6,8 @@ export interface CreateUserConfirmationDialogCloseData {
   token?: string;
   error?: string;
 }
+
+export interface CreateTaskDialogCloseData {
+  title: string;
+  description: string;
+}

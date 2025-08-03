@@ -1,1 +1,38 @@
-<p>home works!</p>
+<div class="table-container" *ngIf="tasks$ | async as tasks">
+  <button
+    mat-mini-fab
+    matTooltip="Add Task"
+    class="add-task-button"
+    color="primary"
+    aria-label="Add task"
+    (click)="addTask()"
+  >
+    <mat-icon>add_2</mat-icon>
+  </button>
+  <table mat-table [dataSource]="tasks" class="mat-elevation-z8">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let task">{{ task.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Description</th>
+      <td mat-cell *matCellDef="let task">{{ task.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Created</th>
+      <td mat-cell *matCellDef="let task">{{ task.createdAt | date: 'longDate' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="completed">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+      <td mat-cell *matCellDef="let task">
+        <mat-checkbox [checked]="task.completed" disabled></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

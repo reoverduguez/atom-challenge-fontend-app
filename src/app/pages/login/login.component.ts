@@ -10,7 +10,7 @@ import { catchError, EMPTY, filter, finalize, of, switchMap, take } from 'rxjs';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { UserCreateConfirmationDialogComponent } from '../../shared/components/user-create-confirmation-dialog/user-create-confirmation-dialog.component';
-import { ApiErrorResponse } from '../../shared/models/auth-response.model';
+import { ApiErrorResponse } from '../../shared/models/api-responses.model';
 import {
   CreateUserConfirmationDialogCloseData,
   CreateUserConfirmationDialogData,
@@ -69,7 +69,8 @@ export class LoginComponent {
                 switchMap((result: CreateUserConfirmationDialogCloseData) => {
                   if (result.error) {
                     console.error(err);
-                    this.snackBar.open(result.error, 'Ok', {
+                    const message = `❌ ${result.error}`;
+                    this.snackBar.open(message, 'Ok', {
                       duration: 5000,
                       horizontalPosition: 'center',
                       verticalPosition: 'top',
@@ -82,7 +83,8 @@ export class LoginComponent {
           } else {
             console.error(err);
             const apiError = err.error as ApiErrorResponse;
-            this.snackBar.open(apiError.error, 'Ok', {
+            const message = `❌ ${apiError.error}`;
+            this.snackBar.open(message, 'Ok', {
               duration: 5000,
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -96,6 +98,7 @@ export class LoginComponent {
         try {
           await signInWithCustomToken(this.auth, response.token);
           localStorage.setItem('authToken', response.token);
+          // this.loadUserTasks();
           this.router.navigateByUrl('/');
         } catch (err) {
           console.error(err);

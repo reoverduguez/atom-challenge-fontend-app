@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { catchError, EMPTY, finalize, take } from 'rxjs';
 
 import { AuthService } from '../../../services/auth/auth.service';
-import { ApiErrorResponse } from '../../models/auth-response.model';
+import { ApiErrorResponse } from '../../models/api-responses.model';
 import { CreateUserConfirmationDialogData } from '../../models/custom-dialog-data.model';
 
 @Component({
@@ -25,6 +25,7 @@ import { CreateUserConfirmationDialogData } from '../../models/custom-dialog-dat
     MatDialogTitle,
     MatDialogClose,
     MatButtonModule,
+    MatButton,
   ],
   templateUrl: './user-create-confirmation-dialog.component.html',
   styleUrl: './user-create-confirmation-dialog.component.css',

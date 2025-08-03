@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AuthResponse } from '../../shared/models/auth-response.model';
+import { AuthResponse } from '../../shared/models/api-responses.model';
 
 @Injectable({
   providedIn: 'root',

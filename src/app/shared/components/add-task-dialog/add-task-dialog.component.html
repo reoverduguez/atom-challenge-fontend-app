@@ -1,0 +1,54 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title>New Task Form</h2>
+  <mat-dialog-content>
+    <form [formGroup]="taskForm" class="form">
+      <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput appearance="fill" type="text" formControlName="title" aria-label="Title" />
+        @if (taskForm.controls['title'].value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="taskForm.controls['title'].setValue('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        @if (
+          taskForm.controls['title'].hasError('required') && taskForm.controls['title'].touched
+        ) {
+          <mat-error>Title is required</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" aria-label="Description"></textarea>
+        @if (taskForm.controls['description'].value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="taskForm.controls['description'].setValue('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        @if (
+          taskForm.controls['description'].hasError('required') &&
+          taskForm.controls['description'].touched
+        ) {
+          <mat-error>Description is required</mat-error>
+        }
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  @if (!loading) {
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="createTask()">Create</button>
+      <button mat-raised-button mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+  } @else {
+    <mat-spinner diameter="50"></mat-spinner>
+  }
+</div>
