@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.config.json",
-    "build": "ng build --output-path=dist",
+    "start": "ng serve",
+    "build-prod": "ng build --output-path=dist --configuration production",
+    "build-dev": "ng build --output-path=dist --configuration development",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint . --ext .ts,.html",
