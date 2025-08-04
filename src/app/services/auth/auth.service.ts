@@ -13,8 +13,6 @@ export class AuthService {
 
   private readonly baseUrl = environment.apiBaseUrl;
 
-  constructor() {}
-
   public login(email: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/auth`, { email });
   }
