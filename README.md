@@ -4,6 +4,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 The UI was built using [Angular Material](https://material.angular.dev/components/categories) components.  
 Code quality and consistent formatting are enforced using **Prettier** and **ESLint**.
 
+User-friendliness and accessibility were prioritized throughout the development process of this app. As well as robust and consistent error handling to ensure a smooth and reliable user experience.
+
 ## Features
 - Authentication using Firebase
 - Task management with protected routes
