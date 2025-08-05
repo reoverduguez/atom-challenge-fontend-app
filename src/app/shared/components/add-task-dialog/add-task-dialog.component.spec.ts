@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { AddTaskDialogComponent } from './add-task-dialog.component';
 import { createTask, createTaskSuccess } from '../../../state/tasks/tasks.actions';
