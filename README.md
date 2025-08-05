@@ -28,3 +28,9 @@ npm run deploy
 
 The app is currently live at:
 [https://atom-challenge-bdff6.firebaseapp.com](https://atom-challenge-bdff6.firebaseapp.com)
+
+## Testing
+Robust tests for written for all components using Karma and Jasmine. You can run tests with
+```bash
+npm run test
+```
